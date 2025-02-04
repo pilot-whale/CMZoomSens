@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《战斗大师》开镜灵敏度系数计算器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            padding: 5px;
+            font-size: 16px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>《战斗大师》开镜灵敏度系数计算器</h1>
+    <form id="calculatorForm">
+        <label for="var1">视野范围 (fov):</label>
+        <input type="number" id="var1" name="var1" required>
+        <br>
+        <label for="var2">屏幕系数 (根据mdh机制计算，填一个0到100之间的数):</label>
+        <input type="number" id="var2" name="var2" required>
+        <br>
+        <button type="button" onclick="calculate()">计算</button>
+    </form>
+
+    <div class="result">
+        <h2>计算结果（实际填写时需要四舍五入）:</h2>
+        <p>1.5倍镜: <span id="result1"></span></p>
+        <p>2倍镜: <span id="result2"></span></p>
+        <p>2.4倍镜: <span id="result3"></span></p>
+        <p>3倍镜: <span id="result4"></span></p>
+        <p>4倍镜: <span id="result5"></span></p>
+        <p>6倍镜: <span id="result6"></span></p>
+        <p>8倍镜: <span id="result7"></span></p>
+    </div>
+
+    <script>
+        function calculate() {
+            // 获取用户输入的值
+            const var1 = parseFloat(document.getElementById('var1').value);
+            const var2 = parseFloat(document.getElementById('var2').value);
+
+            // 定义计算函数
+            function calculateResult(magnification) {
+                if (var2 !== 0) {
+                    return (Math.atan(var2 / 100 * Math.tan(var1 / magnification / 2 * (Math.PI / 180))) /
+                           Math.atan(var2 / 100 * Math.tan(var1 / 2 * (Math.PI / 180)))) / 1.5 * magnification * 100;
+                } else {
+                    return Math.tan(var1 / magnification / 2 * (Math.PI / 180)) /
+                           Math.tan(var1 / 2 * (Math.PI / 180)) / 1.5 * magnification * 100;
+                }
+            }
+
+            // 计算并显示结果
+            document.getElementById('result1').textContent = calculateResult(1.5).toFixed(4);
+            document.getElementById('result2').textContent = calculateResult(2).toFixed(4);
+            document.getElementById('result3').textContent = calculateResult(2.4).toFixed(4);
+            document.getElementById('result4').textContent = calculateResult(3).toFixed(4);
+            document.getElementById('result5').textContent = calculateResult(4).toFixed(4);
+            document.getElementById('result6').textContent = calculateResult(6).toFixed(4);
+            document.getElementById('result7').textContent = calculateResult(8).toFixed(4);
+        }
+    </script>
+</body>
+</html>
